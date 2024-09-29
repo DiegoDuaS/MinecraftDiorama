@@ -54,22 +54,19 @@ fn cast_shadow(
     objects: &[Cube],
 ) -> f32 {
     let light_dir = (light.position - intersect.point).normalize();
-    let shadow_ray_origin = intersect.point;
-    let mut shadow_intensity = 0.0;
+    let shadow_ray_origin = offset_origin(intersect, &light_dir); // Usar offset para evitar auto-sombra
+    let light_distance = (light.position - shadow_ray_origin).magnitude(); // Distancia a la luz
 
     for object in objects {
         let shadow_intersect = object.ray_intersect(&shadow_ray_origin, &light_dir);
-        
-        if shadow_intersect.is_intersecting {
-            let distance_to_light = (shadow_intersect.point - light.position).magnitude();
-            
-            let intensity = 1.0 / (distance_to_light + 1.0); 
-            shadow_intensity = intensity.clamp(0.0, 1.0);
-            break;
+
+        // Verificar si el objeto está entre el punto y la luz
+        if shadow_intersect.is_intersecting && shadow_intersect.distance < light_distance {
+            return 1.0; // Sombra completa
         }
     }
 
-    shadow_intensity
+    0.0 // Sin sombra
 }
 
 

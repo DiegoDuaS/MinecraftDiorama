@@ -7,13 +7,21 @@ use crate::texture::Texture;
 // Static texture initialization
 static TEXTURES: Lazy<Vec<Arc<Texture>>> = Lazy::new(|| {
     vec![
-        Arc::new(Texture::new("./assets/netherrack.png")), // Puedes agregar más texturas aquí
+        Arc::new(Texture::new("./assets/netherrack.jpg")),
+        Arc::new(Texture::new("./assets/obsidian.png")),
+        Arc::new(Texture::new("./assets/ruinedobsidian.png")),
+        Arc::new(Texture::new("./assets/magmablock.png")),
+        Arc::new(Texture::new("./assets/lava.png")), 
     ]
 });
 
 #[derive(Debug, Clone)]
 pub enum TextureType {
     Netherrack,
+    Obsidian,
+    RuinedObsidian,
+    MagmaBlock,
+    Lava
 }
 
 #[derive(Debug, Clone)]
@@ -60,7 +68,11 @@ impl Material {
         texture_type: TextureType, // Solo un tipo de textura
     ) -> Self {
         let texture_index = match texture_type {
-            TextureType::Netherrack => 0, // Suponiendo que Netherrack es el primer índice
+            TextureType::Netherrack => 0, 
+            TextureType::Obsidian => 1,
+            TextureType::RuinedObsidian => 2,
+            TextureType::MagmaBlock => 3,
+            TextureType::Lava => 4,
         };
 
         Material {

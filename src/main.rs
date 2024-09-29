@@ -60,7 +60,6 @@ pub fn render(framebuffer: &mut Framebuffer, objects: &[Cube], camera: &Camera, 
 }
 
 fn main() {
-    let texture_netherrack = Texture::new("./assets/netherrack.png");
     let width = 1000;
     let height = 550;
 
@@ -81,64 +80,117 @@ fn main() {
 
     framebuffer.set_background_color(Color::new(179, 179, 179));
 
-    let rubber = Material::new(
-        Color::new(80, 0, 0),
-        10.0,
-        [0.9, 0.1],
-        0.0,
-        0.0,
-        0.0,
-    );
-    
-    let ivory = Material::new(
-        Color::new(100, 100, 100),
-        50.0,
-        [0.6, 0.3],
-        0.6,
-        0.0,
-        0.0,
-    );
-    
-    let glass = Material::new(
-        Color::new(255, 255, 255),
-        1425.0,
-        [0.0, 10.0],
-        0.5,
-        0.5,
-        0.3,
-    );
     
     let netherrack = Material::new_with_texture(
-        100.0,
-        [0.7, 0.3],
+        10.0,
+        [0.9, 0.1],
         0.1,
         0.0,
         0.0,
         TextureType::Netherrack
     );
+
+    let obsidian = Material::new_with_texture(
+        10.0,
+        [0.8, 0.2],
+        0.1,
+        0.0,
+        0.0,
+        TextureType::Obsidian
+    );
+
+    let ruinedobsidian = Material::new_with_texture(
+        100.0,
+        [0.7, 0.3],
+        0.1,
+        0.0,
+        0.0,
+        TextureType::RuinedObsidian
+    );
+
+    let magma = Material::new_with_texture(
+        100.0,
+        [0.7, 0.3],
+        0.1,
+        0.0,
+        0.0,
+        TextureType::MagmaBlock
+    );
+
+    let lava = Material::new_with_texture(
+        100.0,
+        [0.7, 0.3],
+        0.1,
+        0.0,
+        0.0,
+        TextureType::Lava
+    );
+    
+    
     
 
-    let mut objects = Vec::new(); // Usamos un Vec para almacenar los cubos
+    let mut objects = Vec::new();
+    let cube_size = 0.5;  // Tamaño del cubo
 
-        for i in 0..10 {
-            for j in 0..10 {
-                objects.push(Cube {
-                    min: Vec3::new(i as f32, -1.0, j as f32),  // Vértice inferior izquierdo
-                    max: Vec3::new(i as f32 + 1.0, 1.0, j as f32 + 1.0), // Vértice superior derecho
-                    material: netherrack.clone(), // Material del cubo
-                });
-            }
+    // Crear el piso con mezcla de netherrack, magma y lava
+    for i in 0..6 { // Número de cubos en la dirección x (6 cubos)
+        for j in 0..4 { // Número de cubos en la dirección z (4 cubos)
+            let material = if (i + j) % 3 == 0 {
+                magma.clone() // Algunas partes del piso serán magma
+            } else if (i + j) % 5 == 0 {
+                lava.clone() // Algunas partes del piso serán lava
+            } else {
+                netherrack.clone() // El resto del piso será netherrack
+            };
+            objects.push(Cube {
+                min: Vec3::new(i as f32 * cube_size, -1.0, j as f32 * cube_size), // Vértice inferior izquierdo
+                max: Vec3::new(i as f32 * cube_size + cube_size, -0.5, j as f32 * cube_size + cube_size), // Vértice superior derecho
+                material,
+            });
         }
+    }
+
+    for i in 0..4 {  // Número de cubos en la dirección x 
+        for j in 0..1 {  // Número de cubos en la dirección z 
+            objects.push(Cube {
+                min: Vec3::new((i + 1) as f32 * cube_size, -0.5, (j + 3) as f32 * cube_size),  // Vértice inferior izquierdo
+                max: Vec3::new((i + 1) as f32 * cube_size + cube_size, 0.0, (j + 3) as f32 * cube_size + cube_size),  // Vértice superior derecho
+                material: obsidian.clone(),  // Material del cubo
+            });
+        }
+    }
+
+    for k in 0..3 {  // 3 bloques hacia arriba
+        let y_min = 0.0 + k as f32 * cube_size;  // Coordenada inferior en y
+        let y_max = y_min + cube_size;  // Coordenada superior en y
+
+        objects.push(Cube {
+            min: Vec3::new(0.5, y_min, 1.5),  // Vértice inferior izquierdo
+            max: Vec3::new(0.5 + cube_size, y_max, 1.5 + cube_size),  // Vértice superior derecho
+            material: obsidian.clone(),  // Material del cubo (obsidiana)
+        });
+    }
+
+    for k in 0..3 {  // 3 bloques hacia arriba
+        let y_min = 0.0 + k as f32 * cube_size;  // Coordenada inferior en y
+        let y_max = y_min + cube_size;  // Coordenada superior en y
+
+        objects.push(Cube {
+            min: Vec3::new(2.0, y_min, 1.5),  // Vértice inferior izquierdo
+            max: Vec3::new(2.0 + cube_size, y_max, 1.5 + cube_size),  // Vértice superior derecho
+            material: obsidian.clone(),  // Material del cubo (obsidiana)
+        });
+    }
 
 
     let mut camera = Camera::new(
-        Vec3::new(0.0,0.0,15.0),
-        Vec3::new(0.0,0.0,0.0),
+        Vec3::new(2.0,0.0,6.0),
+        Vec3::new(1.5,1.0,0.0),
         Vec3::new(0.0,1.0,0.0), 
     );
 
     let light = Light::new(
-        Vec3::new(5.0,10.0,24.0), 
+        Vec3::new(4.0,3.0,5.0), 
         Color::new(255,255,255), 
         2.0
     );
