@@ -49,5 +49,10 @@ impl Camera{
         
         self.eye = new_eye;
     }
+
+    pub fn zoom(&mut self, zoom_factor: f32) {
+        let direction = (self.center - self.eye).normalize();
+        self.eye += direction * zoom_factor;
+    }
     
 }
