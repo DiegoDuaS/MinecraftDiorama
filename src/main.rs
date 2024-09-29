@@ -142,9 +142,16 @@ fn main() {
             } else {
                 netherrack.clone() // El resto del piso será netherrack
             };
+            let max = if (i + j) % 3 == 0 {
+                Vec3::new(i as f32 * cube_size + cube_size, -0.5, j as f32 * cube_size + cube_size) // Algunas partes del piso serán magma
+            } else if (i + j) % 5 == 0 {
+                Vec3::new(i as f32 * cube_size + cube_size, -0.55, j as f32 * cube_size + cube_size) // Algunas partes del piso serán lava
+            } else {
+                Vec3::new(i as f32 * cube_size + cube_size, -0.5, j as f32 * cube_size + cube_size) // El resto del piso será netherrack
+            };
             objects.push(Cube {
                 min: Vec3::new(i as f32 * cube_size, -1.0, j as f32 * cube_size), // Vértice inferior izquierdo
-                max: Vec3::new(i as f32 * cube_size + cube_size, -0.5, j as f32 * cube_size + cube_size), // Vértice superior derecho
+                max, // Vértice superior derecho
                 material,
             });
         }
@@ -153,8 +160,8 @@ fn main() {
     for i in 0..4 {  // Número de cubos en la dirección x 
         for j in 0..1 {  // Número de cubos en la dirección z 
             objects.push(Cube {
-                min: Vec3::new((i + 1) as f32 * cube_size, -0.5, (j + 3) as f32 * cube_size),  // Vértice inferior izquierdo
-                max: Vec3::new((i + 1) as f32 * cube_size + cube_size, 0.0, (j + 3) as f32 * cube_size + cube_size),  // Vértice superior derecho
+                min: Vec3::new((i + 1) as f32 * cube_size, -0.5, (j + 1) as f32 * cube_size),  // Vértice inferior izquierdo
+                max: Vec3::new((i + 1) as f32 * cube_size + cube_size, 0.0, (j + 1) as f32 * cube_size + cube_size),  // Vértice superior derecho
                 material: obsidian.clone(),  // Material del cubo
             });
         }
@@ -165,8 +172,8 @@ fn main() {
         let y_max = y_min + cube_size;  // Coordenada superior en y
 
         objects.push(Cube {
-            min: Vec3::new(0.5, y_min, 1.5),  // Vértice inferior izquierdo
-            max: Vec3::new(0.5 + cube_size, y_max, 1.5 + cube_size),  // Vértice superior derecho
+            min: Vec3::new(0.5, y_min, 0.5),  // Vértice inferior izquierdo
+            max: Vec3::new(0.5 + cube_size, y_max, 0.5 + cube_size),  // Vértice superior derecho
             material: obsidian.clone(),  // Material del cubo (obsidiana)
         });
     }
@@ -176,8 +183,8 @@ fn main() {
         let y_max = y_min + cube_size;  // Coordenada superior en y
 
         objects.push(Cube {
-            min: Vec3::new(2.0, y_min, 1.5),  // Vértice inferior izquierdo
-            max: Vec3::new(2.0 + cube_size, y_max, 1.5 + cube_size),  // Vértice superior derecho
+            min: Vec3::new(2.0, y_min, 0.5),  // Vértice inferior izquierdo
+            max: Vec3::new(2.0 + cube_size, y_max, 0.5 + cube_size),  // Vértice superior derecho
             material: obsidian.clone(),  // Material del cubo (obsidiana)
         });
     }
