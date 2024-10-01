@@ -11,7 +11,8 @@ static TEXTURES: Lazy<Vec<Arc<Texture>>> = Lazy::new(|| {
         Arc::new(Texture::new("./assets/obsidian.png")),
         Arc::new(Texture::new("./assets/ruinedobsidian.png")),
         Arc::new(Texture::new("./assets/magmablock.png")),
-        Arc::new(Texture::new("./assets/lava.png")), 
+        Arc::new(Texture::new("./assets/lava.png")),
+        Arc::new(Texture::new("./assets/sand.png")),  
     ]
 });
 
@@ -21,7 +22,8 @@ pub enum TextureType {
     Obsidian,
     RuinedObsidian,
     MagmaBlock,
-    Lava
+    Lava,
+    Sand
 }
 
 #[derive(Debug, Clone)]
@@ -73,6 +75,7 @@ impl Material {
             TextureType::RuinedObsidian => 2,
             TextureType::MagmaBlock => 3,
             TextureType::Lava => 4,
+            TextureType::Sand => 5,
         };
 
         Material {

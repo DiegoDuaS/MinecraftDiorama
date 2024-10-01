@@ -126,6 +126,15 @@ fn main() {
         TextureType::Lava
     );
 
+    let sand = Material::new_with_texture(
+        30.0,
+        [0.8, 0.1],
+        0.0,
+        0.0,
+        0.0,
+        TextureType::Sand
+    );
+
     let mut objects = Vec::new();
     let lights = vec![
         Light::new(Vec3::new(2.75, -0.4, 0.25), Color::new(255, 185, 46), 1.0),
@@ -157,6 +166,26 @@ fn main() {
                 min: Vec3::new(i as f32 * cube_size, -1.0, j as f32 * cube_size), // Vértice inferior izquierdo
                 max, // Vértice superior derecho
                 material,
+            });
+        }
+    }
+
+    for i in 0..7 { // Número de cubos en la dirección x 
+        for j in 0..1 { // Número de cubos en la dirección z 
+            objects.push(Cube {
+                min: Vec3::new(i as f32 * cube_size, -1.5, (j + 4) as f32 * cube_size), // Vértice inferior izquierdo
+                max: Vec3::new(i as f32 * cube_size + cube_size, -1.0, (j + 4) as f32 * cube_size + cube_size), // Vértice superior derecho
+                material: sand.clone(),
+            });
+        }
+    }
+
+    for i in 0..1 { // Número de cubos en la dirección x 
+        for j in 0..4 { // Número de cubos en la dirección z 
+            objects.push(Cube {
+                min: Vec3::new((i + 6) as f32 * cube_size, -1.5, j as f32 * cube_size), // Vértice inferior izquierdo
+                max: Vec3::new((i + 6) as f32 * cube_size + cube_size, -1.0, j as f32 * cube_size + cube_size), // Vértice superior derecho
+                material: sand.clone(),
             });
         }
     }
@@ -212,7 +241,7 @@ fn main() {
     }
 
     let mut camera = Camera::new(
-        Vec3::new(2.0,0.0,6.0),
+        Vec3::new(2.0,2.0,7.0),
         Vec3::new(1.5,1.0,0.0),
         Vec3::new(0.0,1.0,0.0), 
     );
