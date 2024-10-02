@@ -190,6 +190,26 @@ fn main() {
         }
     }
 
+    for i in 0..3 { // Número de cubos en la dirección x 
+        for j in 0..1 { // Número de cubos en la dirección z 
+            objects.push(Cube {
+                min: Vec3::new((i + 1) as f32 * cube_size, -1.0, (j+4) as f32 * cube_size), // Vértice inferior izquierdo
+                max: Vec3::new((i + 1) as f32 * cube_size + cube_size, -0.5, (j+4) as f32 * cube_size + cube_size), // Vértice superior derecho
+                material: netherrack.clone(),
+            });
+        }
+    }
+
+    for i in 0..1 { // Número de cubos en la dirección x 
+        for j in 0..2 { // Número de cubos en la dirección z 
+            objects.push(Cube {
+                min: Vec3::new((i + 6) as f32 * cube_size, -1.0, j as f32 * cube_size), // Vértice inferior izquierdo
+                max: Vec3::new((i + 6) as f32 * cube_size + cube_size, -0.5, j as f32 * cube_size + cube_size), // Vértice superior derecho
+                material: netherrack.clone(),
+            });
+        }
+    }
+
     for i in 0..4 {  // Número de cubos en la dirección x 
         for j in 0..1 {  // Número de cubos en la dirección z 
             let material = if i == 2 {  // Si es el tercer cubo (i == 2), usa ruinedobsidian
